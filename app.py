@@ -33,6 +33,7 @@ import module3_evaluator as evalmod
 import module4_recommender as recmod
 
 # DB path (single file). Change if you prefer another directory.
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "evaluations.db")
 
 app = Flask(__name__)
