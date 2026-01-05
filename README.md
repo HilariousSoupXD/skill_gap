@@ -43,7 +43,7 @@ A skill gap analysis tool that helps students visualize their proficiency levels
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/YOUR_USERNAME/skill_gap.git
+git clone https://github.com/HilariousSoupXD/skill_gap.git
 cd skill_gap
 ```
 
@@ -138,7 +138,7 @@ Get all available roles and their required skills.
 ## 📁 Project Structure
 
 ```
-CSSHack/
+skill_gap/
 ├── app.py                 # Flask backend application
 ├── module1_vectors.py     # Skill vector representations
 ├── module2_models.py       # Role definitions and requirements
