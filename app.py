@@ -155,6 +155,42 @@ DEFAULT_RESOURCES = [
         "coverage": {"Statistics": 0.9}, 
         "type": "video",
         "icon_type": "youtube"     # <--- YouTube Icon
+    },
+    {
+        "id": "res_cn_gate", 
+        "title": "Gate Smashers: Computer Networks (Complete Playlist)", 
+        "url": "https://www.youtube.com/playlist?list=PLxCzCOWd7aiGFBD2-2joCpWOLUrDLvVV_",
+        "time": 15.0, 
+        "coverage": {"CN": 0.9, "OS": 0.2}, 
+        "type": "video",
+        "icon_type": "youtube"     # <--- YouTube Icon
+    },
+    {
+        "id": "res_cpp_fcc", 
+        "title": "C++ Full Course for Beginners (FreeCodeCamp)", 
+        "url": "https://www.youtube.com/watch?v=vLnPwxZdW4Y",
+        "time": 4.5, 
+        "coverage": {"C++": 0.9, "DSA": 0.2}, 
+        "type": "video",
+        "icon_type": "youtube"     # <--- YouTube Icon
+    },
+    {
+        "id": "res_linux_fcc", 
+        "title": "Linux Command Line Basics (FreeCodeCamp)", 
+        "url": "https://www.youtube.com/watch?v=ROjZy1ZbBwY",
+        "time": 3.0, 
+        "coverage": {"Linux": 0.9, "OS": 0.1}, 
+        "type": "video",
+        "icon_type": "youtube"     # <--- YouTube Icon
+    },
+    {
+        "id": "res_numpy_kaggle", 
+        "title": "Kaggle NumPy Course", 
+        "url": "https://www.kaggle.com/learn/numpy",
+        "time": 4.0, 
+        "coverage": {"NumPy": 0.9, "Python": 0.2}, 
+        "type": "practice",
+        "icon_type": "code"        # <--- Coding/Terminal Icon
     }
 ]
 

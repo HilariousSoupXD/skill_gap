@@ -2,11 +2,10 @@ import React from 'react';
 
 export default function LandingPage({ onStart }) {
   return (
-    // Container keeps min-h-screen for centering, lets global grid show through
-    <div className="min-h-screen flex items-center justify-center px-4 py-16">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-16">
       
-      {/* Hero Container */}
-      <div className="relative z-10 w-full max-w-2xl">
+      {/* Main Hero Container */}
+      <div className="relative z-10 w-full max-w-4xl">
         
         {/* Notebook Paper Card */}
         <div 
@@ -24,7 +23,7 @@ export default function LandingPage({ onStart }) {
           <div className="pl-6 md:pl-12 relative z-20">
             
             {/* Title with yellow highlighter effect */}
-            <div className="relative inline-block mb-8 mt-4">
+            <div className="relative inline-block mb-6 mt-4">
               {/* Highlighter stroke */}
               <div className="absolute inset-0 bg-[#FEF08A] -rotate-1 -z-10 transform scale-105 skew-x-3 rounded-sm" />
               <h1 className="font-hand text-5xl md:text-7xl text-slate-800 relative z-10 leading-tight">
@@ -32,13 +31,51 @@ export default function LandingPage({ onStart }) {
               </h1>
             </div>
 
-            {/* UPDATED: Background removed to be transparent */}
-            <p className="font-sans text-lg md:text-xl text-slate-700 mb-12 leading-relaxed max-w-md">
-              Transform your skills into visual insights. Start sketching your potential today!
-            </p>
+            {/* Description */}
+            <div className="mb-10 space-y-4">
+              <p className="font-sans text-base md:text-lg text-slate-700 leading-relaxed max-w-2xl">
+                <strong className="font-hand text-xl">What is Skill Sketch?</strong> A skill gap analyzer 
+                that visualizes your proficiency, identifies missing skills, and generates a personalized 
+                learning plan with prioritized resources for your target role.
+              </p>
+            </div>
 
-            {/* Button Container */}
-            <div className="relative inline-block">
+            {/* Feature Highlights - Checkbox Style */}
+            <div className="mb-10 space-y-3 max-w-2xl">
+              <div className="flex items-start gap-3">
+                <div className="mt-1 w-6 h-6 border-2 border-slate-700 rounded-sm flex-shrink-0 relative flex items-center justify-center">
+                  {/* Green Check Mark with Marker Font */}
+                  <span className="font-hand text-green-600 text-4xl leading-none">✓</span>
+                </div>
+                <p className="font-sans text-sm md:text-base text-slate-700">
+                  <span className="font-hand text-lg">Visual Skill Assessment</span> — See your strengths and gaps on a radar chart
+                </p>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="mt-1 w-6 h-6 border-2 border-slate-700 rounded-sm flex-shrink-0 relative flex items-center justify-center">
+                  {/* Green Check Mark with Marker Font */}
+                  <span className="font-hand text-green-600 text-4xl leading-none">✓</span>
+                </div>
+                <p className="font-sans text-sm md:text-base text-slate-700">
+                  <span className="font-hand text-lg">Smart Learning Plan</span> — Automatic week-by-week schedule with priorities
+                </p>
+              </div>
+              
+              <div className="flex items-start gap-3">
+                <div className="mt-1 w-6 h-6 border-2 border-slate-700 rounded-sm flex-shrink-0 relative flex items-center justify-center">
+                  {/* Green Check Mark with Marker Font */}
+                  <span className="font-hand text-green-600 text-4xl leading-none">✓</span>
+                </div>
+                <p className="font-sans text-sm md:text-base text-slate-700">
+                  <span className="font-hand text-lg">Curated Resources</span> — Hand-picked courses and tutorials for each skill
+                </p>
+              </div>
+            </div>
+
+            {/* Button Container - Centered */}
+            <div className="flex justify-center">
+              <div className="relative inline-block">
               
               {/* Start Analysis Button */}
               <button 
@@ -65,6 +102,7 @@ export default function LandingPage({ onStart }) {
                    Start Analysis <span>→</span>
                 </span>
               </button>
+              </div>
             </div>
           </div>
           
