@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Patrick+Hand&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#FDFBF7] text-slate-800 font-sans;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-hand;
+  }
+}
+
+@layer utilities {
+  .bg-paper {
+    background-color: #FDFBF7;
+    
+    /* SQUARE GRID PATTERN */
+    background-image: 
+        linear-gradient(#cbd5e1 1px, transparent 1px), /* Vertical lines (Slate-300) */
+        linear-gradient(90deg, #cbd5e1 1px, transparent 1px); /* Horizontal lines */
+        
+    /* Grid Size: 40px squares */
+    background-size: 35px 35px; 
+  }
+}
