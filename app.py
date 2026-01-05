@@ -81,22 +81,78 @@ def insert_evaluation(role: str, alignment: float, readiness: float) -> int:
 
 # --------- Static curated resources (MVP) ---------
 DEFAULT_RESOURCES = [
-    {"id": "res_algo_bot", "title": "Algorithms Bootcamp (video+problems)", "time": 8.0,
-     "coverage": {"DSA": 0.9, "C++": 0.3}, "type": "practice"},
-    {"id": "res_os_crash", "title": "Operating Systems Crash Course", "time": 6.0,
-     "coverage": {"OS": 0.8, "DBMS": 0.2}, "type": "theory"},
-    {"id": "res_db_fund", "title": "DB Fundamentals (SQL + Design)", "time": 5.0,
-     "coverage": {"DBMS": 0.9, "SQL": 0.6}, "type": "practice"},
-    {"id": "res_git_prac", "title": "Git Practical Workshop", "time": 1.5,
-     "coverage": {"Git": 0.8}, "type": "practice"},
-    {"id": "res_sys_design", "title": "Intro to System Design", "time": 10.0,
-     "coverage": {"CN": 0.3, "OS": 0.3, "C++": 0.2}, "type": "theory"},
-    {"id": "res_cpp_master", "title": "C++ Mastery (intermediate)", "time": 12.0,
-     "coverage": {"C++": 0.9, "DSA": 0.3}, "type": "practice"},
-    {"id": "res_sql_prac", "title": "SQL Practice Set", "time": 3.0,
-     "coverage": {"SQL": 0.9, "DBMS": 0.3}, "type": "practice"},
-    {"id": "res_linux_basics", "title": "Linux Basics", "time": 2.0,
-     "coverage": {"Linux": 0.8}, "type": "practice"},
+    {
+        "id": "res_cs50_py", 
+        "title": "CS50's Intro to Python (Lectures Only)", 
+        "url": "https://cs50.harvard.edu/python/",
+        "time": 16.0, 
+        "coverage": {"Python": 0.9, "Programming": 0.6}, 
+        "type": "course",
+        "icon_type": "university"  # <--- Harvard/University Icon
+    },
+    {
+        "id": "res_neetcode", 
+        "title": "NeetCode 150 (Walkthrough Videos)", 
+        "url": "https://neetcode.io/roadmap",
+        "time": 25.0, 
+        "coverage": {"DSA": 0.9, "Python": 0.3}, 
+        "type": "practice",
+        "icon_type": "code"        # <--- Coding/Terminal Icon
+    },
+    {
+        "id": "res_ostep", 
+        "title": "OSTEP: Operating Systems (Chapters 1-10)", 
+        "url": "https://pages.cs.wisc.edu/~remzi/OSTEP/",
+        "time": 12.0, 
+        "coverage": {"OS": 0.9, "Linux": 0.3}, 
+        "type": "theory",
+        "icon_type": "docs"        # <--- Book/Docs Icon
+    },
+    {
+        "id": "res_fcc_sql", 
+        "title": "Full Database Course for Beginners (FreeCodeCamp)", 
+        "url": "https://www.youtube.com/watch?v=HXV3zeQKqGY",
+        "time": 4.5, 
+        "coverage": {"SQL": 0.9, "DBMS": 0.5}, 
+        "type": "video",
+        "icon_type": "youtube"     # <--- YouTube Icon
+    },
+    {
+        "id": "res_dbms_gate", 
+        "title": "Gate Smashers: DBMS (Core Playlist)", 
+        "url": "https://www.youtube.com/playlist?list=PLxCzCOWd7aiFAN6I8CuViBuCdJgiOkT2Y",
+        "time": 20.0, 
+        "coverage": {"DBMS": 0.9}, 
+        "type": "video",
+        "icon_type": "youtube"     # <--- YouTube Icon
+    },
+    {
+        "id": "res_git_doc", 
+        "title": "Pro Git Book (Ch 1-3)", 
+        "url": "https://git-scm.com/book/en/v2",
+        "time": 4.0, 
+        "coverage": {"Git": 1.0}, 
+        "type": "theory",
+        "icon_type": "docs"        # <--- Book/Docs Icon
+    },
+    {
+        "id": "res_pandas_kaggle", 
+        "title": "Kaggle Pandas Course", 
+        "url": "https://www.kaggle.com/learn/pandas",
+        "time": 4.0, 
+        "coverage": {"Pandas": 0.9, "Python": 0.2}, 
+        "type": "practice",
+        "icon_type": "code"        # <--- Coding/Terminal Icon
+    },
+    {
+        "id": "res_stats_fcc", 
+        "title": "Statistics for Data Science (FreeCodeCamp)", 
+        "url": "https://www.youtube.com/watch?v=LHBE6Q9XlzI",
+        "time": 8.0, 
+        "coverage": {"Statistics": 0.9}, 
+        "type": "video",
+        "icon_type": "youtube"     # <--- YouTube Icon
+    }
 ]
 
 # --------- Endpoint ---------
@@ -170,6 +226,24 @@ def evaluate_endpoint():
         "plan": plan
     }
     return jsonify(response), 200
+
+@app.route("/roles", methods=["GET"])
+def get_roles():
+    """
+    Returns available roles so the frontend can generate 
+    selection cards dynamically.
+    """
+    # m2.ROLES is the dictionary from module2_models.py
+    available_roles = []
+    for role_name in m2.ROLES.keys():
+        # You could add logic here to grab specific descriptions if you added them to models.py
+        available_roles.append({
+            "id": role_name,
+            "display_name": role_name,
+            "icon_type": "code" if role_name == "SDE" else "chart" # Simple hint for the frontend
+        })
+    
+    return jsonify(available_roles), 200
 
 # --------- Bootstrapping ---------
 if __name__ == "__main__":
