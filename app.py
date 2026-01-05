@@ -315,8 +315,11 @@ def get_roles():
     return jsonify(response), 200
 
 # --------- Bootstrapping ---------
+# Initialize database on startup
+init_db()
+
 if __name__ == "__main__":
-    init_db()
     print("Initialized DB at", DB_PATH)
     print("Run the Flask app and hit POST /evaluate with JSON payload.")
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)

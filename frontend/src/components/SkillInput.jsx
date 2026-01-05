@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { API_BASE_URL } from '../config';
 
 export default function SkillInput({ selectedRole, onSubmit, onBack }) {
   const [skillValues, setSkillValues] = useState({});
@@ -72,7 +73,7 @@ export default function SkillInput({ selectedRole, onSubmit, onBack }) {
       };
 
       // Call API
-      const response = await fetch("http://127.0.0.1:5000/evaluate", {
+      const response = await fetch(`${API_BASE_URL}/evaluate`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

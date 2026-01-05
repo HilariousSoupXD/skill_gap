@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Code, BarChart, PenTool, Loader2 } from "lucide-react";
+import { API_BASE_URL } from '../config';
 
 export default function RoleSelector({ onSelect, onBack }) {
   const [roles, setRoles] = useState([]);
@@ -10,7 +11,7 @@ export default function RoleSelector({ onSelect, onBack }) {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await fetch("http://127.0.0.1:5000/roles");
+        const response = await fetch(`${API_BASE_URL}/roles`);
 
         if (!response.ok) {
           throw new Error("Failed to connect to Flask backend");
