@@ -2,6 +2,7 @@ import { useState } from 'react';
 import LandingPage from './components/LandingPage';
 import RoleSelector from './components/RoleSelector';
 import SkillInput from './components/SkillInput';
+import Dashboard from './components/Dashboard';
 
 export default function App() {
   // Simple state to manage which "page" we are showing
@@ -9,17 +10,24 @@ export default function App() {
   const [view, setView] = useState('landing');
   const [selectedRole, setSelectedRole] = useState(null);
   const [evaluationResult, setEvaluationResult] = useState(null);
+  const [studentProfile, setStudentProfile] = useState(null);
 
   const handleRoleSelect = (role) => {
     setSelectedRole(role);
     setView('input');
   };
 
-  const handleSkillSubmit = (result) => {
+  const handleSkillSubmit = ({ result, studentProfile }) => {
     setEvaluationResult(result);
+    setStudentProfile(studentProfile);
     setView('results');
-    // TODO: Create Results component to display the evaluation
-    console.log('Evaluation result:', result);
+  };
+
+  const handleRestart = () => {
+    setView('landing');
+    setSelectedRole(null);
+    setEvaluationResult(null);
+    setStudentProfile(null);
   };
 
   return (
@@ -49,22 +57,14 @@ export default function App() {
         />
       )}
 
-      {/* PAGE 4: RESULTS (placeholder) */}
-      {view === 'results' && (
-        <div className="min-h-screen flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-4xl font-hand text-slate-800 mb-4">Evaluation Complete!</h1>
-            <p className="text-lg font-sans text-slate-600 mb-8">
-              Results view coming soon...
-            </p>
-            <button
-              onClick={() => setView('landing')}
-              className="px-6 py-3 border-2 border-slate-700 bg-white font-hand text-xl shadow-[4px_4px_0px_rgba(0,0,0,0.15)] hover:shadow-[6px_6px_0px_rgba(0,0,0,0.2)] transition-all"
-            >
-              Start Over
-            </button>
-          </div>
-        </div>
+      {/* PAGE 4: RESULTS (Dashboard) */}
+      {view === 'results' && evaluationResult && studentProfile && selectedRole && (
+        <Dashboard
+          evaluationResult={evaluationResult}
+          studentProfile={studentProfile}
+          selectedRole={selectedRole}
+          onRestart={handleRestart}
+        />
       )}
 
     </div>
