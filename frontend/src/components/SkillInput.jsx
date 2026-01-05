@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 
 export default function SkillInput({ selectedRole, onSubmit, onBack }) {
   const [skillValues, setSkillValues] = useState({});
-  const [weeklyHours, setWeeklyHours] = useState(10);
-  const [weeks, setWeeks] = useState(4);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
 
@@ -70,9 +68,7 @@ export default function SkillInput({ selectedRole, onSubmit, onBack }) {
       // Prepare payload
       const payload = {
         role: selectedRole.id,
-        student_profile: studentProfile,
-        weekly_hours: parseFloat(weeklyHours),
-        weeks: parseInt(weeks) || 4
+        student_profile: studentProfile
       };
 
       // Call API
@@ -90,7 +86,7 @@ export default function SkillInput({ selectedRole, onSubmit, onBack }) {
       }
 
       const data = await response.json();
-      onSubmit(data);
+      onSubmit({ result: data, studentProfile });
     } catch (err) {
       console.error("Submit error:", err);
       setError(err.message || "Failed to submit evaluation. Please try again.");
@@ -290,38 +286,6 @@ export default function SkillInput({ selectedRole, onSubmit, onBack }) {
               </div>
             );
           })}
-        </div>
-
-        {/* Weekly Hours Input */}
-        <div className="space-y-2">
-          <label className="block text-xl text-slate-800 font-hand font-bold">
-            How many hours per week can you invest in learning?
-          </label>
-          <input
-            type="number"
-            min="1"
-            max="168"
-            value={weeklyHours}
-            onChange={(e) => setWeeklyHours(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-slate-700 bg-white font-sans text-slate-800 shadow-[2px_2px_0px_rgba(0,0,0,0.15)] focus:outline-none focus:shadow-[4px_4px_0px_rgba(0,0,0,0.2)] transition-all"
-            required
-          />
-        </div>
-
-        {/* Weeks Input */}
-        <div className="space-y-2">
-          <label className="block text-xl text-slate-800 font-hand font-bold">
-            In how many weeks do you want to master this role?
-          </label>
-          <input
-            type="number"
-            min="1"
-            max="52"
-            value={weeks}
-            onChange={(e) => setWeeks(e.target.value)}
-            className="w-full px-4 py-3 border-2 border-slate-700 bg-white font-sans text-slate-800 shadow-[2px_2px_0px_rgba(0,0,0,0.15)] focus:outline-none focus:shadow-[4px_4px_0px_rgba(0,0,0,0.2)] transition-all"
-            required
-          />
         </div>
 
         {/* Submit Button (Stamped Sticker Style) */}

@@ -168,32 +168,14 @@ def evaluate_endpoint():
     # Required fields
     role = data.get("role")
     student_profile = data.get("student_profile")
-    weekly_hours = data.get("weekly_hours")
-    weeks = data.get("weeks", 4)
 
     # Minimal presence checks
-    if role is None or student_profile is None or weekly_hours is None:
-        return jsonify({"error": "Missing required fields: role, student_profile, weekly_hours"}), 400
+    if role is None or student_profile is None:
+        return jsonify({"error": "Missing required fields: role, student_profile"}), 400
 
     # Unknown role -> 400 (explicit check)
     if role not in m2.ROLES:
         return jsonify({"error": f"Unknown role: {role}"}), 400
-
-    # weekly_hours validation
-    try:
-        weekly_hours = float(weekly_hours)
-    except Exception:
-        return jsonify({"error": "weekly_hours must be a number"}), 400
-    if not (weekly_hours > 0 and weekly_hours <= 24 * 7):
-        return jsonify({"error": "weekly_hours must be > 0 and realistic"}), 400
-
-    # weeks validation
-    try:
-        weeks = int(weeks)
-    except Exception:
-        return jsonify({"error": "weeks must be an integer"}), 400
-    if not (1 <= weeks <= 52):
-        return jsonify({"error": "weeks must be between 1 and 52"}), 400
 
     # student_profile must be a dict/object
     if not isinstance(student_profile, dict):
@@ -208,11 +190,45 @@ def evaluate_endpoint():
     except Exception as e:
         return jsonify({"error": "Internal evaluation error", "details": str(e)}), 500
 
+    # Get role requirements for priority/skim calculations and response
+    role_requirements = {}
+    if role in m2.ROLES:
+        for skill, spec in m2.ROLES[role].items():
+            role_requirements[skill] = {
+                "required": spec["required"],
+                "weight": spec["weight"]
+            }
+
+    # Convert student_profile to numeric format for recommender
+    # Frontend sends numeric values (0-1), but handle strings if present
+    import module1_vectors as m1
+    numeric_student_profile = {}
+    for skill, prof in student_profile.items():
+        if isinstance(prof, (int, float)):
+            numeric_student_profile[skill] = float(prof)
+        elif isinstance(prof, str):
+            # Use evaluator's conversion function for string proficiency values
+            try:
+                numeric_student_profile[skill] = m1.map_proficiency_to_score(prof)
+            except:
+                numeric_student_profile[skill] = 0.0
+        else:
+            numeric_student_profile[skill] = 0.0
+
     # Build learning plan (uses static catalog in this MVP)
     try:
-        plan = recmod.recommend_learning_plan(evaluation, DEFAULT_RESOURCES, weekly_hours, weeks)
+        plan = recmod.recommend_learning_plan(evaluation, DEFAULT_RESOURCES, role_requirements, numeric_student_profile)
     except Exception as e:
         return jsonify({"error": "Error building learning plan", "details": str(e)}), 500
+
+    # Enrich selected_resources with URLs, coverage, and icon_type from DEFAULT_RESOURCES
+    resource_lookup = {r["id"]: r for r in DEFAULT_RESOURCES}
+    for resource in plan["selected_resources"]:
+        full_resource = resource_lookup.get(resource["id"])
+        if full_resource:
+            resource["url"] = full_resource.get("url", "")
+            resource["coverage"] = full_resource.get("coverage", {})  # Include coverage for skill updates
+            resource["icon_type"] = full_resource.get("icon_type", "docs")  # Include icon_type for display
 
     # Persist evaluation summary (alignment + readiness)
     try:
@@ -226,7 +242,10 @@ def evaluate_endpoint():
         "alignment_score": evaluation["alignment_score"],
         "readiness_score": evaluation["readiness_score"],
         "top_gaps": evaluation["top_gaps"],
-        "plan": plan
+        "gaps": evaluation.get("gaps", {}),  # Include full gaps object for explanations
+        "plan": plan,
+        "role_requirements": {skill: req["required"] for skill, req in role_requirements.items()},  # Simplified for frontend compatibility
+        "role_requirements_full": role_requirements  # Include full role requirements with weights for explanations
     }
     return jsonify(response), 200
 
