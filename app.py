@@ -27,6 +27,7 @@ import sys
 import sqlite3
 from typing import Dict, Any
 from flask import Flask, request, jsonify, g
+from flask_cors import CORS
 
 import module2_models as m2    
 import module3_evaluator as evalmod 
@@ -37,6 +38,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "evaluations.db")
 
 app = Flask(__name__)
+# Enable CORS for all routes (allows frontend to access backend)
+CORS(app)
 
 # --------- DB helpers ---------
 def get_db():
