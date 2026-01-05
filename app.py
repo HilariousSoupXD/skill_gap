@@ -233,17 +233,28 @@ def get_roles():
     Returns available roles so the frontend can generate 
     selection cards dynamically.
     """
-    # m2.ROLES is the dictionary from module2_models.py
-    available_roles = []
-    for role_name in m2.ROLES.keys():
-        # You could add logic here to grab specific descriptions if you added them to models.py
-        available_roles.append({
-            "id": role_name,
-            "display_name": role_name,
-            "icon_type": "code" if role_name == "SDE" else "chart" # Simple hint for the frontend
-        })
+    response = []
     
-    return jsonify(available_roles), 200
+    # Iterate through the ROLES defined in module2_models
+    for role_name, skills_data in m2.ROLES.items():
+        # 1. Define the Visuals (Hardcoded logic for the MVP)
+        if role_name == "SDE":
+            icon = "code"
+            desc = "Core CS & Systems"
+        else:
+            icon = "chart"
+            desc = "Stats & Analytics"
+        
+        # 2. Build the Object
+        response.append({
+            "id": role_name,            # used for logic (e.g. "SDE")
+            "label": role_name,         # used for display title
+            "description": desc,        # <--- REQUIRED for the UI text
+            "icon": icon,               # "code" or "chart"
+            "skills": list(skills_data.keys()) # used later for the form
+        })
+        
+    return jsonify(response), 200
 
 # --------- Bootstrapping ---------
 if __name__ == "__main__":
