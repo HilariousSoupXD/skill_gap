@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { API_BASE_URL } from '../config';
 
 export default function SkillInput({ selectedRole, onSubmit, onBack }) {
   const [skillValues, setSkillValues] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState(null);
+  const [showWaitNotification, setShowWaitNotification] = useState(false);
+  const notificationTimeoutRef = useRef(null);
 
   // Initialize skill values to 0 if not set
   React.useEffect(() => {
@@ -57,6 +59,17 @@ export default function SkillInput({ selectedRole, onSubmit, onBack }) {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);
+    setShowWaitNotification(false);
+
+    // Clear any existing timeout
+    if (notificationTimeoutRef.current) {
+      clearTimeout(notificationTimeoutRef.current);
+    }
+
+    // Show notification after 10 seconds if still submitting
+    notificationTimeoutRef.current = setTimeout(() => {
+      setShowWaitNotification(true);
+    }, 10000);
 
     try {
       // Convert slider values (0-100) to proficiency (0.0-1.0)
@@ -87,9 +100,19 @@ export default function SkillInput({ selectedRole, onSubmit, onBack }) {
       }
 
       const data = await response.json();
+      if (notificationTimeoutRef.current) {
+        clearTimeout(notificationTimeoutRef.current);
+        notificationTimeoutRef.current = null;
+      }
+      setShowWaitNotification(false);
       onSubmit({ result: data, studentProfile });
     } catch (err) {
       console.error("Submit error:", err);
+      if (notificationTimeoutRef.current) {
+        clearTimeout(notificationTimeoutRef.current);
+        notificationTimeoutRef.current = null;
+      }
+      setShowWaitNotification(false);
       setError(err.message || "Failed to submit evaluation. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -106,6 +129,15 @@ export default function SkillInput({ selectedRole, onSubmit, onBack }) {
 
   return (
     <div className="min-h-screen flex flex-col items-center p-8 bg-transparent">
+      
+      {/* Wait Notification (Yellow Sticky Note) */}
+      {showWaitNotification && isSubmitting && (
+        <div className="fixed top-8 left-1/2 -translate-x-1/2 z-50 animate-bounce">
+          <div className="bg-[#FEF08A] border-2 border-slate-700 shadow-[6px_6px_0px_rgba(0,0,0,0.2)] px-6 py-4 rotate-1 font-hand text-lg text-slate-800 max-w-md">
+            Please wait a minute, I am looking for my pen...I swear I had it a second ago
+          </div>
+        </div>
+      )}
       
       {/* Error Banner */}
       {error && (

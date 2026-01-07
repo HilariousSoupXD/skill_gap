@@ -1,36 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Code, BarChart, PenTool, Loader2 } from "lucide-react";
-import { API_BASE_URL } from '../config';
+import React from "react";
+import { Code, BarChart, PenTool } from "lucide-react";
 
 export default function RoleSelector({ onSelect, onBack }) {
-  const [roles, setRoles] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  // 1. Fetch Roles from Python Backend
-  useEffect(() => {
-    const fetchRoles = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/roles`);
-
-        if (!response.ok) {
-          throw new Error("Failed to connect to Flask backend");
-        }
-
-        const data = await response.json();
-        setRoles(data);
-        setError(null);
-      } catch (err) {
-        console.error("Fetch error:", err);
-        setError("Is your Python backend running? (python app.py)");
-        // We do NOT use mock data here to force checking the connection
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchRoles();
-  }, []);
+  // Hardcoded roles to avoid API call delay (roles are static data)
+  const roles = [
+    {
+      id: "SDE",
+      label: "SDE",
+      description: "Core CS & Systems",
+      icon: "code",
+      skills: ["DSA", "OS", "DBMS", "CN", "C++", "Git", "Linux", "SQL"]
+    },
+    {
+      id: "DataAnalyst",
+      label: "Data Scientist",
+      description: "Stats & Analytics",
+      icon: "chart",
+      skills: ["Statistics", "SQL", "Python", "Pandas", "NumPy", "DSA", "Git"]
+    }
+  ];
 
   // 2. Icon Helper
   const getIconComponent = (iconName) => {
@@ -55,26 +43,9 @@ export default function RoleSelector({ onSelect, onBack }) {
     return rotations[index % rotations.length];
   };
 
-  // 4. Loading State
-  if (loading) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-transparent gap-4">
-        <Loader2 className="w-8 h-8 animate-spin text-slate-400" />
-        <p className="text-3xl text-slate-500 font-hand">Loading Notebook...</p>
-      </div>
-    );
-  }
-
-  // 5. Main UI
+  // Main UI
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-8 bg-transparent">
-      
-      {/* Error Banner */}
-      {error && (
-        <div className="mb-8 px-6 py-4 bg-red-100 border-2 border-red-300 text-red-700 rounded rotate-1 font-hand text-xl shadow-sm">
-          ⚠️ {error}
-        </div>
-      )}
 
       {/* Header */}
       <div className="relative mb-16 text-center">
